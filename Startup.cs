@@ -40,7 +40,6 @@ namespace wealthy
             services.AddPushSubscriptionStore(Configuration)
                 .AddPushNotificationService(Configuration);
 
-            services.AddSingleton<IBlogService, BlogService>();
             services.AddSingleton<IEntryService, EntryService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }

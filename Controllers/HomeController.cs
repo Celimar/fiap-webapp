@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Lib.Net.Http.WebPush;
-using MakiBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using wealthy.Models;
 using wealthy.Services;
@@ -12,18 +11,9 @@ namespace wealthy.Controllers
     {
         private IEntryService _entryService;
     
-// =======================================================================================================================================
-        private IBlogService _blogService;
-// =======================================================================================================================================
-
         private readonly IPushService _pushService;
-        public HomeController(
-            IBlogService blogService
-            , IPushService pushService
-            , IEntryService entryService
-        )
+        public HomeController(IPushService pushService , IEntryService entryService)
         {
-            _blogService = blogService;
             _pushService = pushService;
             _entryService = entryService;
         }
@@ -37,27 +27,6 @@ namespace wealthy.Controllers
         {
             return View();
         }
-// =======================================================================================================================================
-
-        public JsonResult LatestBlogPosts()
-        {
-            var posts = _blogService.GetLatestPosts();
-            return Json(posts);
-        }
-
-        public JsonResult MoreBlogPosts(int oldestBlogPostId)
-        {
-        var posts = _blogService.GetOlderPosts(oldestBlogPostId);
-        return Json(posts);
-        }
-
-        public ContentResult Post(string link)
-        {
-            return Content(_blogService.GetPostText(link));
-        }
-
-
-// =======================================================================================================================================
         public JsonResult LatestEntries()
         {
             var entries = _entryService.GetLatestEntries();
@@ -76,7 +45,6 @@ namespace wealthy.Controllers
             return Content(_entryService.GetEntryText(link));
         }
 
-// =======================================================================================================================================
         [HttpGet("publickey")]
         public ContentResult GetPublicKey()
         {

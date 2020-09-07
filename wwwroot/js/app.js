@@ -1,4 +1,3 @@
-// var blogService = require('./blogService.js');
 var entryService = require('./entryService.js');
 var testPushService = require('./testPushService.js');
 var serviceWorker = require('./swRegister.js');
@@ -24,12 +23,6 @@ if ('BackgroundFetchManager' in self) {
 }
 
 window.pageEvents = {
-    // loadBlogPost: function (link) {
-    //     blogService.loadBlogPost(link);
-    // },
-    // loadMoreBlogPosts: function () {
-    //     blogService.loadMoreBlogPosts();
-    // },
     loadEntries: function (link) {
         entryService.loadEntry(link);
     },
@@ -104,7 +97,6 @@ window.pageEvents = {
     }
 };
 
-// blogService.loadLatestBlogPosts();
 entryService.loadLatestEntries();
 testPushService.bindSendNotification();
 gyroscope.init();

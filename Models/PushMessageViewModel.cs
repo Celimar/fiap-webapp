@@ -1,6 +1,6 @@
 ﻿using Lib.Net.Http.WebPush;
 
-namespace MakiBlog.Models
+namespace wealthy.Models
 {
     public class PushMessageViewModel
     {

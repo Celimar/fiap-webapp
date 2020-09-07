@@ -68,12 +68,6 @@ namespace wealthy.Services
             return File.ReadAllText($"{_env.WebRootPath}/Entries/{entry.Id}_entry.md");
         }
 
-//     public string GetEntryText(string link)
-//     {
-//          var entry = Entries.FirstOrDefault(_ => _.Link == link);
-//          return File.ReadAllText($"{_env.WebRootPath}/Entries/{entry.Id}_post.md");
-//     }        
-
         public List<Entry> GetLatestEntries()
         {            
             return Entries.OrderByDescending(_ => _.Id).Take(3).ToList();
