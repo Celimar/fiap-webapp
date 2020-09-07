@@ -9,12 +9,18 @@
     <link rel="manifest" href="/manifest.json">
 
     <title>@ViewData["Title"] - wealthy</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+
     <div style="display:none; padding: 5px; textalign:center;" id="install-container">
         <button onclick="pageEvents.tryAddHomeScreen();" class="btn-link no-style">Clique aqui</button> e adicione The Wealthy Blog na sua home page!
+    </div>
+
+    <div id="notification-subscribe-section" style="display:none; padding: 5px; text-align:center;">
+        <button class="btn-link no-style" onclick="pageEvents.requestPushPermission();">Clique aqui</button> para receber notificações quando novos lançamentos forem registrados
     </div>
     
     <header>

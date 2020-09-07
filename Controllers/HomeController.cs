@@ -1,4 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
+using Lib.Net.Http.WebPush;
+using MakiBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using wealthy.Models;
 using wealthy.Services;
@@ -74,6 +77,45 @@ namespace wealthy.Controllers
         }
 
 // =======================================================================================================================================
+        [HttpGet("publickey")]
+        public ContentResult GetPublicKey()
+        {
+            return Content(_pushService.GetKey(), "text/plain");
+        }
+
+        //armazena subscricoes
+        [HttpPost("subscriptions")]
+        public async Task<IActionResult> StoreSubscription([FromBody]PushSubscription subscription)
+        {
+            int res = await _pushService.StoreSubscriptionAsync(subscription);
+
+            if (res > 0)
+                return CreatedAtAction(nameof(StoreSubscription), subscription);
+
+            return NoContent();
+        }
+
+        [HttpDelete("subscriptions")]
+        public async Task<IActionResult> DiscardSubscription(string endpoint)
+        {
+            await _pushService.DiscardSubscriptionAsync(endpoint);
+
+            return NoContent();
+        }
+
+        [HttpPost("notifications")]
+        public async Task<IActionResult> SendNotification([FromBody]PushMessageViewModel messageVM)
+        {
+            var message = new PushMessage(messageVM.Notification)
+            {
+                Topic = messageVM.Topic,
+                Urgency = messageVM.Urgency                
+            };
+
+            _pushService.SendNotificationAsync(message);
+
+            return NoContent();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
