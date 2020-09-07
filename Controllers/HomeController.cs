@@ -7,20 +7,22 @@ namespace wealthy.Controllers
 {
     public class HomeController : Controller
     {
-
         private IEntryService _entryService;
     
 // =======================================================================================================================================
-        //private IBlogService _blogService;
+        private IBlogService _blogService;
 // =======================================================================================================================================
 
         private readonly IPushService _pushService;
-        public HomeController(IPushService pushService, IEntryService entryService)
-//        public HomeController(IBlogService blogService, IPushService pushService, IEntryService entryService)
+        public HomeController(
+            IBlogService blogService
+            , IPushService pushService
+            , IEntryService entryService
+        )
         {
-            //_blogService = blogService;
+            _blogService = blogService;
             _pushService = pushService;
-           _entryService = entryService;
+            _entryService = entryService;
         }
         
         public IActionResult Index()
@@ -34,23 +36,22 @@ namespace wealthy.Controllers
         }
 // =======================================================================================================================================
 
-        // public JsonResult LatestBlogPosts()
-        // {
-        //     var posts = _blogService.GetLatestPosts();
-        //     return Json(posts);
-        // }
-        
+        public JsonResult LatestBlogPosts()
+        {
+            var posts = _blogService.GetLatestPosts();
+            return Json(posts);
+        }
 
-        // public JsonResult MoreBlogPosts(int oldestBlogPostId)
-        // {
-        // var posts = _blogService.GetOlderPosts(oldestBlogPostId);
-        // return Json(posts);
-        // }
+        public JsonResult MoreBlogPosts(int oldestBlogPostId)
+        {
+        var posts = _blogService.GetOlderPosts(oldestBlogPostId);
+        return Json(posts);
+        }
 
-        // public ContentResult Post(string link)
-        // {
-        //     return Content(_blogService.GetPostText(link));
-        // }
+        public ContentResult Post(string link)
+        {
+            return Content(_blogService.GetPostText(link));
+        }
 
 
 // =======================================================================================================================================

@@ -1,8 +1,8 @@
 ﻿
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">Bbuilding Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to The Wealthy Blog</h1> <br>
+    <h2 class="display-6">Registrando seus avanços financeiros!!!</h2>
 
     <div class="alert alert-info show" id="connectionstatus"></div>
 
@@ -12,9 +12,10 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title"> {{Entry.Id}} - {{Entry.Description}}</h5>
-                <p class="cardtext"> {{Entry.Category}} - {{Entry.CategoryDescription}}</p>   
-                <p class="cardtext"> R$ {{Entry.Value}} - {{Entry.Date}}</p>   
-                <p class="cardtext"> Total R$ {{Entry.Total}} </p>   
+                <p class="cardtext"> Category: {{Entry.Category}} - {{Entry.CategoryDescription}}</p>   
+                <p class="cardtext"> Data: {{Entry.Date}}</p>   
+                <p class="cardtext"> Entry {{Entry.Value}}</p>   
+                <p class="cardtext"> Amount {{Entry.Total}} </p>   
                 <button onclick="pageEvents.loadEntry('{{Link}}');" class="btn btn-primary">ir</button>
             </div>
         </div>
@@ -49,6 +50,13 @@
             {{Content}}
         </div>
         <a href="#blog-title" class="btn btnprimary">voltar</a>
+    </script>
+
+    <script id="blog-content-not-found" type="text/template">
+        <h1> Ups, artigo não está no Cache! </h1>
+        <div> Você quer que a gente continue tentando fazer download do artigo em plano de fundo e te avise quando estiver disponível?  </div>
+        <br />
+        <button class="btn btn-success">Sim!</button>
     </script>
 
 </div>

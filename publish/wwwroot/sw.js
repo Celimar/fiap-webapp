@@ -31,6 +31,16 @@ var blogCacheFiles = [
     '/images/icons/wealthy-icon_144.png'
 ];
 
+
+function timeout(ms, promise) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            reject();
+        }, ms);
+        promise.then(resolve, reject)
+    });
+}
+
 //Installing
 //Pre-cache App Shell
 self.addEventListener('install', function (event) {
@@ -65,20 +75,41 @@ self.addEventListener('activate', function (event) {
 
 });
 
-self.addEventListener('fetch', function (event) {
-    console.log('SW: Evento de fetch ' + event.request.url);
-    if (event.request.url.toLowerCase().includes("/home")) {
+// self.addEventListener('fetch', function (event) {
+//     console.log('SW: Evento de fetch ' + event.request.url);
+//     if (event.request.url.toLowerCase().includes("/home")) {
+//         console.log('[ServiceWorker] online - get online ' + event.request.url);
+//         event.respondWith(fetch(event.request));
+//     } else {
+//         event.respondWith(
+//             timeout(1000,
+//                 fetch(event.request)).catch(function () {
+//                     console.log('[ServiceWorker] offline - get from cache: ' + event.request.url);
+//                     return caches.match(event.request);
+//                 })
+//         );
+//     }
+// });
+
+self.addEventListener('fetch', event => {
+
+    console.log('url request: ' + event.request.url);
+
+    if (event.request.url.toLowerCase().includes("/home") 
+            || event.request.url.toLowerCase() === "/subscriptions"
+            || event.request.url.toLowerCase() === "/notifications") {
+        
         console.log('[ServiceWorker] online - get online ' + event.request.url);
         event.respondWith(fetch(event.request));
     } else {
+
         event.respondWith(
-            timeout(1000,
-                fetch(event.request)).catch(function () {
+         
+            timeout(500, fetch(event.request))
+                .catch(function () {
                     console.log('[ServiceWorker] offline - get from cache: ' + event.request.url);
                     return caches.match(event.request);
-                })
+            });
         );
-    }
+    };
 });
-
-

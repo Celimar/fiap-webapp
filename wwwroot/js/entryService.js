@@ -1,73 +1,87 @@
-define(['./template.js', '../lib/showdown/showdown.js', './clientStorage.js'],
-    function (template, showdown, clientStorage) {
+define(['./template.js', '../lib/showdown/showdown.js', './clientStorage.js'], 
+function (template, showdown, clientStorage) {
 
-        var entryUrl = '/Home/Entry/?link=';
-        var latestEntryUrl = '/Home/LatestEntries/';
-        var blogMoreEntriesUrl = '/Home/MoreEntries/?oldestEntryId=';
+    var latestEntriesUrl = '/Home/LatestEntries/';
+    var entryUrl = '/Home/Entry/?link=';
+    var moreEntriesUrl = '/Home/MoreEntries/?oldestEntryId=';
 
-        function fetchPromise(url) {
-            return new Promise(function (resolve, reject) {
-                fetch(url)
-                    .then(function (response) {
-                        return response.json();
-                    }).then(function (data) {
-                        clientStorage.addEntries(data)
-                            .then(function () {
-console.log("clientStorage.addEntries(data): " + JSON.stringify(data));
-                                resolve('The connection is OK, showing latest results');
-                            });
-                    }).catch(function (e) {
-                        resolve('No connection, showing offline results');
-                    });
-                setTimeout(function () { resolve('The connection is hanging, showing offline results'); }, 1000);
-            });
-        }
+    function fetchPromise(url, link, text) {
 
-        function loadData(url) {
-            fetchPromise(url)
-                .then(function (status) {
-                    $('#connection-status').html(status);
-                    clientStorage.getEntries()
-                        .then(function (entries) {
-console.log("clientStorage.getEntries(): " + JSON.stringify(entries));
-                            template.appendEntryList(entries);
+        link = link || '';
+
+        return new Promise(function (resolve, reject) {
+            fetch(url + link)
+                .then(function (data) {
+
+                    var resolveSuccess = function () {
+                        resolve('The connection is OK, showing latest results');
+                    };
+
+                    if (text) {
+                        data.text().then(function (text) {
+                            clientStorage.addEntryText(link, text).then(resolveSuccess);
                         });
+                    }
+                    else {
+                        data.json().then(function (jsonData) {
+                            clientStorage.addEntries(jsonData).then(resolveSuccess);
+                        });
+                    }
+
+                }).catch(function (e) {
+                    resolve('No connection, showing offline results');
                 });
-        }
 
-        function getOldestEntryId() {
-            return oldestEntryId;
-        }
+            setTimeout(function () { resolve('The connection is hanging, showing offline results'); }, 800);
+        });
+    }
 
-        function setOldestEntryId(data) {
-            var ids = data.map(item => item.id);
-            oldestEntryId = Math.min(...ids);
-        }
+    function loadData(url) {
+        fetchPromise(url)
+            .then(function (status) {
+                $('#connection-status').html(status);
 
-        function loadLatestEntries() {
-            loadData(latestEntryUrl);
-        }
+                clientStorage.getEntries()
+                    .then(function (entries) {
+                        template.appendEntryList(entries);
+                    });
+            });
+    }
 
-        function loadMoreEntries() {
-            loadData(blogMoreEntriesUrl + clientStorage.getOldestEntryId());
-        }
+    function loadLatestEntries() {
+        loadData(latestEntriesUrl);
+    }
 
-        function loadEntry(link) {
-            fetch(entryUrl + link)
-                .then(function (response) {
-                    return response.text();
-                }).then(function (data) {
-                    var converter = new showdown.Converter();
-                    html = converter.makeHtml(data);
-                    template.showEntryItem(html, link);
-                    window.location = '#' + link;
-                });
-        }
+    function loadEntry(link) {
 
-        return {
-            loadLatestEntries: loadLatestEntries,
-            loadEntry: loadEntry,
-            loadMoreEntries: loadMoreEntries
-        };
+        fetchPromise(entryUrl, link, true)
+            .then(function (status) {
+                $('#connection-status').html(status);
 
-    });
+                clientStorage.getEntryText(link)
+                    .then(function (data) {
+                        if (!data) {
+
+                            var contentNotFound = $('#entry-content-not-found')
+                                .html().replace(/{{Link}}/g, link);
+                            template.showEntryItem(contentNotFound, link);
+                        } else {
+                            var converter = new showdown.Converter();
+                            html = converter.makeHtml(data);
+                            template.showEntryItem(html, link);
+                        }
+                        window.location = '#' + link;
+                    });
+            });
+    }
+
+    function loadMoreEntries() {
+        loadData(moreEntriesUrl + clientStorage.getOldestEntryId());
+    }
+
+    return {
+        loadLatestEntries: loadLatestEntries,
+        loadEntry: loadEntry,
+        loadMoreEntries: loadMoreEntries
+    };
+});
