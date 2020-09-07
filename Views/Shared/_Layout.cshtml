@@ -3,6 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="description" content="Weathy - does not matter how much you gain, means how you deal with your money">
+    <meta name="theme-color" content="#00aae7"/>
+    <link rel="manifest" href="/manifest.json">
+
     <title>@ViewData["Title"] - wealthy</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -41,6 +46,8 @@
         </div>
     </footer>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/es6-promise/es6-promise.js"></script>
     <script src="~/lib/fetch/fetch.js"></script>
     <script src="~/lib/systemjs/system.js"></script>
@@ -49,14 +56,7 @@
     <script src="~/lib/localforage/localforage-setitems.js"></script>
     <script src="~/js/site.js"></script>
 
-
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-
-
+    @* <script src="~/js/site.js" asp-append-version="true"></script> *@
 
     @RenderSection("Scripts", required: false)
 </body>
