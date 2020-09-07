@@ -1,8 +1,52 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<hr/>
+    <div class="entry-list card-columns" id="entrylist"></div>
+    <script id="entry-card" type="text/template">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"> {{Entry.Id}} - {{Entry.Description}}</h5>
+                <p class="cardtext"> {{Entry.Category}} - {{Entry.CategoryDescription}}</p>   
+                <p class="cardtext"> R$ {{Entry.Value}} - {{Entry.Date}}</p>   
+                <p class="cardtext"> Total R$ {{Entry.Total}} </p>   
+                <button onclick="pageEvents.loadEntry('{{Link}}');" class="btn btn-primary">ir</button>
+            </div>
+        </div>
+    </script>
+    <div class="center">
+        <button class="btn btn-primary" onclick="pageEvents.loadMoreEntries();">ver mais</button>
+        <br /><br />
+    </div>
+
+<hr/>
+
+    <div class="blog-list card-columns" id="bloglist"></div>
+    <script id="blog-card" type="text/template">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"> {{PostId}} - {{Title}}</h5>
+                <p class="cardtext">{{ShortDescription}}</p>   
+                <button onclick="pageEvents.loadBlogPost('{{Link}}');" class="btn btn-primary">ir</button>
+            </div>
+        </div>
+    </script>
+    <div class="center">
+        <button class="btn btn-primary" onclick="pageEvents.loadMoreBlogPosts();">ver mais</button>
+        <br /><br />
+    </div>
+
+<hr/>
+
+    <div id="blog-item-container"></div>
+    <script id="blog-item" type="text/template">
+        <div id="{{Link}}" class="blog-item">
+            {{Content}}
+        </div>
+        <a href="#blog-title" class="btn btnprimary">voltar</a>
+    </script>
+
 </div>
